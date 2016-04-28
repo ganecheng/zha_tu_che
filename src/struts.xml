@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.action.extension" value="action,," />
+
+	<constant name="struts.devMode" value="true" />
+	<!-- 指定Web应用的默认编码集,相当于调用HttpServletRequest的setCharacterEncoding方法 -->
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<!-- 设置浏览器是否缓存静态内容,默认值为true(生产环境下使用),开发阶段最好关闭 -->
+	<constant name="struts.serve.static.browserCache" value="false" />
+	<!-- 当struts的配置文件修改后,系统是否自动重新加载该文件,默认值为false(生产环境下使用),开发阶段最好打开 -->
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<!-- struts不过滤的路径 -->
+	<constant name="struts.action.excludePattern" value="/ue/.*" />
+	<!-- 一次上传只可以上传20M，不管一次上传多少个文件，按总和计算 -->
+	<constant name="struts.multipart.maxSize" value="20971520" />
+
+	<!-- 根路径下的action请求开始 -->
+	<package name="default" namespace="/" extends="struts-default">
+		<result-types>
+			<result-type name="json" class="org.apache.struts2.json.JSONResult" />
+		</result-types>
+
+		<action name="login_do" class="com.pe.action.AccountAction" method="login_do">
+			<result name="success" type="json">
+				<!-- 这里指定将被Struts2序列化的属性，该属性在action中必须有对应的getter方法 -->
+				<param name="root">json</param>
+			</result>
+		</action>
+
+		<action name="u_*" class="com.pe.action.AccountAction" method="u_{1}">
+			<result name="success" type="json">
+				<!-- 这里指定将被Struts2序列化的属性，该属性在action中必须有对应的getter方法 -->
+				<param name="root">json</param>
+			</result>
+		</action>
+
+	</package>
+	<!-- 根路径下的action请求结束 -->
+	<!-- 管理员的action请求开始 -->
+	<package name="admin_package" namespace="/admin" extends="struts-default">
+		<result-types>
+			<result-type name="json" class="org.apache.struts2.json.JSONResult" />
+		</result-types>
+
+		<action name="show_list_record_list" class="com.pe.action.AdminAction" method="show_list_record_list">
+			<result name="success">/item/ajax/show_listrecord_list.jsp</result>
+		</action>
+		<action name="update_listrecord" class="com.pe.action.AdminAction" method="update_listrecord">
+			<result name="success">/item/ajax/update_listrecord.jsp</result>
+		</action>
+		
+		<action name="show_driver_list" class="com.pe.action.AdminAction" method="show_driver_list">
+			<result name="success">/item/ajax2/show_listrecord_list.jsp</result>
+		</action>
+		<action name="update_driver" class="com.pe.action.AdminAction" method="update_driver">
+			<result name="success">/item/ajax2/update_listrecord.jsp</result>
+		</action>
+		
+		<action name="show_truck_list" class="com.pe.action.AdminAction" method="show_truck_list">
+			<result name="success">/item/ajax3/show_listrecord_list.jsp</result>
+		</action>
+		<action name="update_truck" class="com.pe.action.AdminAction" method="update_truck">
+			<result name="success">/item/ajax3/update_listrecord.jsp</result>
+		</action>
+		
+		<action name="show_trunk_list" class="com.pe.action.AdminAction" method="show_trunk_list">
+			<result name="success">/item/ajax3/show_listrecord_list.jsp</result>
+		</action>
+		<action name="update_trunk" class="com.pe.action.AdminAction" method="update_trunk">
+			<result name="success">/item/ajax3/update_listrecord.jsp</result>
+		</action>
+
+		<action name="getDownloadFile" class="com.pe.action.AdminAction">
+			<result name="success" type="stream">
+				<param name="contentType">text/plain</param>
+				<param name="contentDisposition">attachment;fileName="${fileName}"</param>
+				<param name="inputName">downloadFile</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+
+		<action name="admin_*" class="com.pe.action.AdminAction" method="admin_{1}">
+			<result name="success" type="json">
+				<!-- 这里指定将被Struts2序列化的属性，该属性在action中必须有对应的getter方法 -->
+				<param name="root">json</param>
+			</result>
+		</action>
+	</package>
+	<!-- 管理员下的action请求结束 -->
+</struts>
